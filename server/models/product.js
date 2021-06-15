@@ -28,10 +28,10 @@ const productSchema = new mongoose.Schema(
       trim: true,
       maxlength: 32,
     },
-    // category: {
-    //   type: ObjectId,
-    //   ref: "Category",
-    // },
+    category: {
+      type: ObjectId,
+      ref: "Category",
+    },
     // subCategories: [
     //   {
     //     type: ObjectId,
@@ -47,7 +47,7 @@ const productSchema = new mongoose.Schema(
     //   type: Array,
     // },
     shipping: {
-      type: Boolean,
+      type: String,
       enum: ["Yes", "No"],
     },
     color: {

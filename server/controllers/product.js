@@ -18,3 +18,8 @@ exports.create = async (req, res) => {
     res.status(400).send("Create Product Failed");
   }
 };
+
+exports.read = async (req, res) => {
+  let Products = await Product.find({});
+  res.json(Products);
+};
