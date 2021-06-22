@@ -7,12 +7,13 @@ exports.create = async (req, res) => {
     let check = await SubCategory.findOne({ slug: name });
     console.log(check);
     if (check) {
-      return res.status(400).json({ err: "SubCategory Already Exists" });
+      return res.status(400).json({ err: "SubCategory Already Exist" });
     }
     res.json(
       await new SubCategory({ name, parent, slug: slugify(name) }).save()
     );
   } catch (err) {
+    console.log(err.message)
     res.status(400).json({ err: err.message });
   }
 };
