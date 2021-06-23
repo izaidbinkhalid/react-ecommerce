@@ -19,7 +19,12 @@ exports.create = async (req, res) => {
   }
 };
 
-exports.read = async (req, res) => {
-  let Products = await Product.find({});
+exports.listAll = async (req, res) => {
+  let Products = await Product.find({})
+    .limit(parseInt(req.params.count))
+    .populate("Category")
+    .populate("SubCategory")
+    .sort([["createdAt", "desc"]])
+    .exec();
   res.json(Products);
 };
