@@ -1,4 +1,5 @@
 const SubCategory = require("../models/subCategory");
+const Product = require("../models/product");
 const slugify = require("slugify");
 
 exports.create = async (req, res) => {
@@ -13,21 +14,27 @@ exports.create = async (req, res) => {
       await new SubCategory({ name, parent, slug: slugify(name) }).save()
     );
   } catch (err) {
-    console.log(err.message)
+    console.log(err.message);
     res.status(400).json({ err: err.message });
   }
 };
 
 exports.list = async (req, res) => {
-  let sub = await SubCategory.find();
-  console.log(sub);
-  res.json(await SubCategory.find({}).sort({ createdAt: -1 }).exec());
+  let sub = await SubCategory.find({}).sort({ createdAt: -1 }).exec();
   res.json(sub);
 };
 
 exports.read = async (req, res) => {
   let subCategory = await SubCategory.findOne({ slug: req.params.slug }).exec();
-  res.json(subCategory);
+
+  const products = await Product.find({ subCategories: subCategory })
+    .populate("category")
+    .exec();
+
+  res.json({
+    subCategory,
+    products,
+  });
 };
 
 exports.update = async (req, res) => {
