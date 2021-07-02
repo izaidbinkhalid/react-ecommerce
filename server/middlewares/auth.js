@@ -8,11 +8,11 @@ exports.authCheck = async (req, res, next) => {
     const firebaseUser = await admin
       .auth()
       .verifyIdToken(req.headers.authtoken);
-    console.log("Firebase User in AuthCheck", firebaseUser);
+    // console.log("Firebase User in AuthCheck", firebaseUser);
     req.user = firebaseUser;
     next();
   } catch (err) {
-    console.log("err in models", err)
+    console.log("err in middlewares", err)
     res.status(401).json({
       err: "Invalid or Expired Token",
     });

@@ -120,11 +120,13 @@ exports.productStar = async (req, res) => {
   // To check if the currently logging user already rated this product.
   let existingRatedObject = product.ratings.find(
     (ele) => ele.postedBy.toString() === user._id.toString()
-  );  
+  );
 
   // if user haven't left rating yet, then push it:
   if (existingRatedObject === undefined) {
-    let ratingAdded = await Product.findByIdAndUpdate( product._id, {
+    let ratingAdded = await Product.findByIdAndUpdate(
+      product._id,
+      {
         $push: { ratings: { star: star, postedBy: user._id } },
       },
       { new: true }
@@ -142,4 +144,20 @@ exports.productStar = async (req, res) => {
     console.log("Rating-Updated", ratingUpdate);
     res.json(ratingUpdate);
   }
+};
+
+exports.listRelated = async (req, res) => {
+  const product = await Product.findById(req.params.productId).exec();
+
+  const related = await Product.find({
+    _id: { $ne: product._id },
+    category: product.category,
+  })
+    .limit(3)
+    .populate("category")
+    .populate("subCategory")
+    .populate("postedBy")
+    .exec();
+
+  res.json(related);
 };
